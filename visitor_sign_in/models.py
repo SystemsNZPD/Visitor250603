@@ -17,7 +17,7 @@ class Form(models.Model):
 
     visitor_name = models.CharField(max_length=80)
     company_name = models.CharField(max_length=80)
-    phone_number = PhoneNumberField()
+    phone_number = models.CharField(max_length=20)
     visit_to = models.CharField(
         max_length=40,
         choices=VISIT_TO_CHOICES,

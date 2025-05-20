@@ -1,6 +1,9 @@
 from django import forms
 from phonenumber_field.formfields import PhoneNumberField
 
+def validate_digits(value):
+    if not value.isdigit():
+        raise forms.ValidationError("Please enter digits only (0-9). ")
 
 class VisitorForm(forms.Form): #inherit class Form from forms module
     VISIT_TO_CHOICES = [
@@ -18,10 +21,17 @@ class VisitorForm(forms.Form): #inherit class Form from forms module
 
     visitor_name = forms.CharField(max_length=80)   #database table, character filed
     company_name = forms.CharField(max_length=80)
-    phone_number = PhoneNumberField(widget=forms.TextInput(
-        attrs={'inputmode': 'numeric', 'pattern': '[0-9]*', 'placeholder': 'Please enter your phone number'}))
+    phone_number = forms.CharField(
+        max_length=20,
+        required=True,
+        validators=[validate_digits],
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Please enter your phone number',
+            'inputmode': 'numeric',
+            'pattern': '[0-9]*'
+        })
+    )
     visit_to = forms.ChoiceField(
-        max_length=40,
         choices=VISIT_TO_CHOICES,
         help_text="Who are you visiting"
     )
