@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .forms import VisitorForm
 from .models import Form
 from django.contrib import messages
+from django.core.mail import EmailMessage
 
 def index(request):
     if request.method == 'POST':
@@ -14,6 +15,10 @@ def index(request):
 
             Form.objects.create(visitor_name=visitor_name, company_name=company_name,
                                 phone_number=phone_number, visit_to=visit_to)
+
+            message_body = f"{visitor_name} From {company_name} is here!"
+            email_message = EmailMessage(subject="You have Visitor!!", body=message_body, to=["raylee598@gmail.com"])
+            email_message.send()  #specifiy the sender in setting .py
 
             messages.success(request, "Form Submitted successfully!!!")
             form = VisitorForm()  # Clear the form after successful submission
