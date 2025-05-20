@@ -11,19 +11,23 @@
         {% csrf_token %}  <!--security feature for django -->
         <div class="form-group mb-4">   <!-- div is for style change -->
             <label for="visitor_name">Visitor Name: </label>
-            <input class="form-control" type="text" id="visitor_name" name="visitor_name" required>
+            <input class="form-control" type="text" id="visitor_name" name="visitor_name" required
+            placeholder="Enter your Name">
          </div>
         <div class="form-group mb-4">
             <label for="company_name">Company Name: </label>
-            <input class="form-control" type="text" id="company_name" name="company_name" required>
+            <input class="form-control" type="text" id="company_name" name="company_name" required
+            placeholder="Enter your company Name">
         </div>
         <div class="form-group mb-4">
             <label for="phone_number">Phone Number: </label>
-            <input class="form-control" type="number" id="phone_number" name="phone_number" required>
+            <input class="form-control" type="number" id="phone_number" name="phone_number" required
+            placeholder="Please Leave the Phone Number">
         </div>
         <div class="form-group mb-4">
-            <label for="visit_to">Visit to: </label>
+            <label for="visit_to">Please select who you are visiting </label>
             <select class="form-control" id="visit_to" name="visit_to" required>
+                <option value="" disabled selected>Please select who you are visiting: </option>
                 <option value="tony">Tony Cox-Smith</option>
                 <option value="ann">Ann Mansoor</option>
                 <option value="joanna">Joanna Wu</option>
@@ -34,9 +38,21 @@
                 <option value="ricky">Richard Light</option>
                 <option value="cy">Chim Yun Cheng</option>
                 <option value="julie">Julie Ullness</option>
-
             </select>
         </div>
+        <button class="btn btn-secondary mb-4" type="submit">Submit</button>
+    <!-- btn sepecify the style/font of the button, btn-secondary define the color -->
+
+    <!--will get the flash message from app.py, "messages" is a variable-->
+    {% if messages %}  <!-- this is jinja2 syntax, communicate python and html-->
+
+        <div id="flash-message" class="alert alert-success">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+
+    {% endif %}
     </form>
 </body>
 </html>
