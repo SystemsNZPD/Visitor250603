@@ -27,3 +27,18 @@ def index(request):
     else:
         form = VisitorForm()
     return render(request, "index.html", {"form": form})
+
+def return_visitor(request):
+    # Get all unique companies from the database
+    companies = Form.objects.values_list('company_name', flat=True).distinct().order_by('company_name')
+    # Get all visitors grouped by company
+    visitors_by_company = {}
+    for company in companies:
+        visitors = Form.objects.filter(company_name=company).values_list('visitor_name', 'phone_number').distinct()
+        visitors_by_company[company] = list(visitors)
+
+    visit_to_choices = Form.VISIT_TO_CHOICES
+
+    context = {'companies': companies, 'visitors_by_company': visitors_by_company,
+               'visit_to_choices':visit_to_choices}
+    return render(request, 'return_visitor.html', context)

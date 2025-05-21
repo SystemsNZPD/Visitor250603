@@ -16,7 +16,7 @@ class Form(models.Model):
     ]
 
     visitor_name = models.CharField(max_length=80)
-    company_name = models.CharField(max_length=80)
+    company_name = models.CharField(max_length=80,db_index=True)
     phone_number = models.CharField(max_length=20)
     visit_to = models.CharField(
         max_length=40,

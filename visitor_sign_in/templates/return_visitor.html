@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 class="mt-4 mb-4">Return Visitor</h1>
+<form method="post">
+    {% csrf_token %}
+
+    <!-- Company Dropdown -->
+    <div class="form-group mb-4">
+        <label for="company">Company:</label>
+        <select class="form-control" id="company" name="company" required>
+            <option value="" disabled selected>Select Company</option>
+            {% for company in companies %}
+                <option value="{{ company }}">{{ company }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Visitor Dropdown (Populated via JavaScript) -->
+    <div class="form-group mb-4">
+        <label for="visitor">Visitor:</label>
+        <select class="form-control" id="visitor" name="visitor" required>
+            <option value="" disabled selected>Select Visitor</option>
+        </select>
+    </div>
+
+    <!-- Phone Number (Auto-filled) -->
+    <div class="form-group mb-4">
+        <label for="phone">Phone Number:</label>
+        <input type="text" class="form-control" id="phone" name="phone" readonly>
+    </div>
+
+    <!-- Visit To Field (Same as before) -->
+    <div class="form-group mb-4">
+        <label for="visit_to">Visit to:</label>
+        <select class="form-control" id="visit_to" name="visit_to" required>
+            <option value="" disabled selected>Select who you are visiting</option>
+            {% for value, label in visit_to_choices %}
+                <option value="{{ value }}">{{ label }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <button class="btn btn-secondary" type="submit">Submit</button>
+</form>
+
+<script>
+document.getElementById('company').addEventListener('change', function() {
+    const company = this.value;
+    const visitorSelect = document.getElementById('visitor');
+    const phoneInput = document.getElementById('phone');
+
+    // Clear existing options
+    visitorSelect.innerHTML = '<option value="" disabled selected>Select Visitor</option>';
+
+    // Populate visitors for selected company
+    const visitors = {{ visitors_by_company|safe }};
+    visitors[company].forEach(visitor => {
+        const option = document.createElement('option');
+        option.value = visitor[0];  // visitor_name
+        option.textContent = visitor[0];
+        visitorSelect.appendChild(option);
+    });
+});
+
+document.getElementById('visitor').addEventListener('change', function() {
+    const visitorName = this.value;
+    const company = document.getElementById('company').value;
+    const visitors = {{ visitors_by_company|safe }};
+
+    // Find phone number for selected visitor
+    const visitorData = visitors[company].find(v => v[0] === visitorName);
+    document.getElementById('phone').value = visitorData[1];
+});
+</script>
+{% endblock %}
