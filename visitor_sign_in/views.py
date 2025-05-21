@@ -58,4 +58,6 @@ def return_visitor(request):
 
     context = {'companies': companies, 'visitors_by_company': visitors_by_company,
                'visit_to_choices':visit_to_choices}
+    print(list(visitors))
+    print(visitors_by_company)
     return render(request, 'return_visitor.html', context)

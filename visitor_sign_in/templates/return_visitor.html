@@ -48,8 +48,9 @@
 
 </script>
 
+{{ visitors_by_company|json_script:"visitors-data" }}
 <script>
-    const visitorsByCompany = {{ visitors_by_company|safe }};
+    const visitorsByCompany = JSON.parse(document.getElementById('visitors-data').textContent);
     document.getElementById('company_name').addEventListener('change', function() {
         const company = this.value;
         const visitorSelect = document.getElementById('visitor_name');
