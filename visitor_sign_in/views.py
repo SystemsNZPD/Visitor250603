@@ -31,13 +31,30 @@ def index(request):
 def return_visitor(request):
     # Get all unique companies from the database
     companies = Form.objects.values_list('company_name', flat=True).distinct().order_by('company_name')
+
+    visit_to_choices = Form.VISIT_TO_CHOICES
+
+    if request.method == 'POST':
+        company_name = request.POST.get('company_name')
+        visitor_name = request.POST.get('visitor_name')
+        phone_number = request.POST.get('phone_number')
+        visit_to = request.POST.get('visit_to')
+
+        #save to database
+        Form.objects.create(
+            visitor_name=visitor_name,
+            company_name=company_name,
+            phone_number=phone_number,
+            visit_to=visit_to
+        )
+        messages.success(request, "Return visitor sign-in submitted successfully!")
+
+    # Prepare visitors_by_company for the dropdown logic
     # Get all visitors grouped by company
     visitors_by_company = {}
     for company in companies:
         visitors = Form.objects.filter(company_name=company).values_list('visitor_name', 'phone_number').distinct()
         visitors_by_company[company] = list(visitors)
-
-    visit_to_choices = Form.VISIT_TO_CHOICES
 
     context = {'companies': companies, 'visitors_by_company': visitors_by_company,
                'visit_to_choices':visit_to_choices}
