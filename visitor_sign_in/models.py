@@ -23,6 +23,7 @@ class Form(models.Model):
         choices=VISIT_TO_CHOICES,
         help_text="Who are you visiting"
     )
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.visitor_name} from {self.company_name}"
