@@ -73,6 +73,11 @@ def return_visitor(request):
                 has_no_running_nose=has_no_running_nose
             )
 
+            message_body = f"{visitor_name} From {company_name} is here!"
+            email_message = EmailMessage(subject="You have Visitor!!", body=message_body, to=["raylee598@gmail.com"])
+            email_message.send()  # specifiy the sender in setting .py
+
+
             messages.success(request, "Return visitor sign-in submitted successfully!")
             form = VisitorForm()  # Clear the form after successful submission
         else:
