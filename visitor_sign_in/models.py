@@ -25,5 +25,12 @@ class Form(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
+    has_no_fever = models.BooleanField(default=False)
+    has_no_vomiting = models.BooleanField(default=False)
+    has_no_skin_lesions = models.BooleanField(default=False)
+    has_no_running_nose = models.BooleanField(default=False)
+
+
+
     def __str__(self):
         return f"{self.visitor_name} from {self.company_name}"

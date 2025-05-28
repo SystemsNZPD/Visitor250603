@@ -31,6 +31,56 @@
             {% endfor %}
         </select>
     </div>
+
+    <!-- Health Declaration Section -->
+    <fieldset style="border:1px solid #b3b3b3; padding:1em; margin-bottom:1.5em;">
+        <legend><b>Health Declaration</b></legend>
+        <div class="form-group mb-3">
+            <label class="switch-label" for="id_has_no_fever">
+              <input type="checkbox" name="has_no_fever" id="id_has_no_fever" required>
+              <span class="switch-custom"></span>
+              <span class="switch-text">I Have No Fever</span>
+              <div class="switch-confirm">Touch to Confirm</div>
+            </label>
+            {% if form.has_no_fever.errors %}
+              <div class="text-danger">{{ form.has_no_fever.errors.0 }}</div>
+            {% endif %}
+        </div>
+        <div class="form-group mb-3">
+            <label class="switch-label" for="id_has_no_vomiting">
+                <input type="checkbox" name="has_no_vomiting" id="id_has_no_vomiting" required>
+                <span class="switch-custom"></span>
+                <span class="switch-text">I Have No Vomiting</span>
+                <div class="switch-confirm">Touch to Confirm</div>
+            </label>
+            {% if form.has_no_vomiting.errors %}
+                <div class="text-danger">{{ form.has_no_vomiting.errors.0 }}</div>
+            {% endif %}
+        </div>
+        <div class="form-group mb-3">
+            <label class="switch-label" for="id_has_no_skin_lesions">
+                <input type="checkbox" name="has_no_skin_lesions" id="id_has_no_skin_lesions" required>
+                <span class="switch-custom"></span>
+                <span class="switch-text">I Have No Skin Lesions</span>
+                <div class="switch-confirm">Touch to Confirm</div>
+            </label>
+            {% if form.has_no_skin_lesions.errors %}
+                <div class="text-danger">{{ form.has_no_skin_lesions.errors.0 }}</div>
+            {% endif %}
+        </div>
+        <div class="form-group mb-3">
+            <label class="switch-label" for="id_has_no_running_nose">
+                <input type="checkbox" name="has_no_running_nose" id="id_has_no_running_nose" required>
+                <span class="switch-custom"></span>
+                <span class="switch-text">I Have No Running Nose or Ear Discharge</span>
+                <div class="switch-confirm">Touch to Confirm</div>
+            </label>
+            {% if form.has_no_running_nose.errors %}
+                <div class="text-danger">{{ form.has_no_running_nose.errors.0 }}</div>
+            {% endif %}
+        </div>
+    </fieldset>
+
     <button class="btn btn-secondary" type="submit">Submit</button>
     {% if messages %}
         {% for message in messages %}

@@ -2,8 +2,66 @@
 {% block content%}
 <h1 class="mt-4 mb-4">Visitor Sign In</h1>
 <form method="post">
+
+
     {% csrf_token %}
-    {{ form.as_p }}
+
+    <div class="form-group mb-4">
+        {{ form.visitor_name.label_tag }}
+        {{ form.visitor_name }}
+    </div>
+    <div class="form-group mb-4">
+        {{ form.company_name.label_tag }}
+        {{ form.company_name }}
+    </div>
+    <div class="form-group mb-4">
+        {{ form.phone_number.label_tag }}
+        {{ form.phone_number }}
+    </div>
+    <div class="form-group mb-4">
+        {{ form.visit_to.label_tag }}
+        {{ form.visit_to }}
+    </div>
+
+    <!-- Health Declaration Section -->
+    <fieldset style="border:1px solid #b3b3b3; padding:1em; margin-bottom:1.5em;">
+        <legend><b>Health Declaration</b></legend>
+        <div class="form-group mb-3">
+            <label class="switch-label" for="id_has_no_fever">
+                <input type="checkbox" name="has_no_fever" id="id_has_no_fever" >
+                <span class="switch-custom"></span>
+                <span class="switch-text">I Have No Fever</span>
+                <div class="switch-confirm">Touch to Confirm</div>
+            </label>
+        </div>
+        <div class="form-group mb-3">
+            <label class="switch-label" for="id_has_no_vomiting">
+                <input type="checkbox" name="has_no_vomiting" id="id_has_no_vomiting" >
+                <span class="switch-custom"></span>
+                <span class="switch-text">I Have No Vomiting</span>
+                <div class="switch-confirm">Touch to Confirm</div>
+            </label>
+        </div>
+        <div class="form-group mb-3">
+            <label class="switch-label" for="id_has_no_skin_lesions">
+                <input type="checkbox" name="has_no_skin_lesions" id="id_has_no_skin_lesions">
+                <span class="switch-custom"></span>
+                <span class="switch-text">I Have No Skin Lesions</span>
+                <div class="switch-confirm">Touch to Confirm</div>
+            </label>
+        </div>
+        <div class="form-group mb-3">
+            <label class="switch-label" for="id_has_no_running_nose">
+                <input type="checkbox" name="has_no_running_nose" id="id_has_no_running_nose">
+                <span class="switch-custom"></span>
+                <span class="switch-text">I Have No Running Nose or Ear Discharge</span>
+                <div class="switch-confirm">Touch to Confirm</div>
+            </label>
+        </div>
+    </fieldset>
+
+
+
     <button class="btn btn-secondary mb-4" type="submit">Submit</button>
     {% if messages %}
         {% for message in messages %}
@@ -13,4 +71,46 @@
         {% endfor %}
     {% endif %}
 </form>
+<script>
+document.querySelector('form').addEventListener('submit', function(e) {
+    var ids = [
+        'id_has_no_fever',
+        'id_has_no_vomiting',
+        'id_has_no_skin_lesions',
+        'id_has_no_running_nose'
+    ];
+    var valid = true;
+    ids.forEach(function(id) {
+        var checkbox = document.getElementById(id);
+        var confirmDiv = checkbox.closest('.form-group').querySelector('.switch-confirm');
+        if (!checkbox.checked) {
+            confirmDiv.textContent = 'Please confirm';
+            confirmDiv.style.color = 'red';
+            confirmDiv.style.display = 'inline'; // Show message if not checked
+            valid = false;
+        } else {
+            confirmDiv.style.display = 'none'; // Hide message when checked
+        }
+    });
+    if (!valid) e.preventDefault();
+});
+
+// Also update the message live when the user clicks the checkbox:
+['id_has_no_fever','id_has_no_vomiting','id_has_no_skin_lesions','id_has_no_running_nose'].forEach(function(id) {
+    var checkbox = document.getElementById(id);
+    var confirmDiv = checkbox.closest('.form-group').querySelector('.switch-confirm');
+    checkbox.addEventListener('change', function() {
+        if (checkbox.checked) {
+            confirmDiv.style.display = 'none';
+        } else {
+            confirmDiv.textContent = 'Touch to Confirm';
+            confirmDiv.style.color = '';
+            confirmDiv.style.display = 'inline';
+        }
+    });
+});
+</script>
+
+
 {% endblock %}
+

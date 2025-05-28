@@ -7,6 +7,7 @@ def validate_digits(value):
 
 class VisitorForm(forms.Form): #inherit class Form from forms module
     VISIT_TO_CHOICES = [
+        ('', 'Select who you are visiting'),
         ('tony', 'Tony Cox-Smith'),
         ('ann', 'Ann Mansoor'),
         ('joanna', 'Joanna Wu'),
@@ -33,5 +34,10 @@ class VisitorForm(forms.Form): #inherit class Form from forms module
     )
     visit_to = forms.ChoiceField(
         choices=VISIT_TO_CHOICES,
-        help_text="Who are you visiting"
+        # help_text="Who are you visiting"
     )
+
+    has_no_fever = forms.BooleanField(label= "I Have No Fever", required=True)
+    has_no_vomiting = forms.BooleanField(label= "I Have No Vomiting or Diarrhoea", required=True)
+    has_no_skin_lesions = forms.BooleanField(label= "I Have No Discharging Skin Lesions", required=True)
+    has_no_running_nose = forms.BooleanField(label= "I Have No Running Nose or Ear Discharge", required=True)
