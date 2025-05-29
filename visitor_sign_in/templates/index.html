@@ -1,27 +1,42 @@
 {% extends 'base.html' %}
 {% block content%}
 <h1 class="mt-4 mb-4">Visitor Sign In</h1>
+
+<style>
+.label-lg {
+    font-size: 1.3rem;
+    font-weight: 400;
+}
+</style>
+
 <form method="post">
-
-
     {% csrf_token %}
 
-    <div class="form-group mb-4">
-        {{ form.visitor_name.label_tag }}
-        {{ form.visitor_name }}
+    <div class="row mb-3 align-items-center">
+        <label class="col-sm-2 col-form-label label-lg" for="id_visitor_name">Visitor Name:</label>
+        <div class="col-sm-6">
+            {{ form.visitor_name }}
+        </div>
     </div>
-    <div class="form-group mb-4">
-        {{ form.company_name.label_tag }}
-        {{ form.company_name }}
+    <div class="row mb-3 align-items-center">
+        <label class="col-sm-2 col-form-label label-lg" for="id_company_name">Company Name:</label>
+        <div class="col-sm-6">
+            {{ form.company_name }}
+        </div>
     </div>
-    <div class="form-group mb-4">
-        {{ form.phone_number.label_tag }}
-        {{ form.phone_number }}
+    <div class="row mb-3 align-items-center">
+        <label class="col-sm-2 col-form-label label-lg" for="id_phone_number">Phone number:</label>
+        <div class="col-sm-6">
+            {{ form.phone_number }}
+        </div>
     </div>
-    <div class="form-group mb-4">
-        {{ form.visit_to.label_tag }}
-        {{ form.visit_to }}
+    <div class="row mb-3 align-items-center">
+        <label class="col-sm-2 col-form-label label-lg" for="id_visit_to">Visit to:</label>
+        <div class="col-sm-6">
+            {{ form.visit_to }}
+        </div>
     </div>
+
 
     <!-- Health Declaration Section -->
     <fieldset style="border:1px solid #b3b3b3; padding:1em; margin-bottom:1.5em;">
@@ -110,6 +125,7 @@ document.querySelector('form').addEventListener('submit', function(e) {
     });
 });
 </script>
+
 
 
 {% endblock %}

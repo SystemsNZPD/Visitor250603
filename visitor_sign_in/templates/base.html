@@ -64,16 +64,8 @@
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-          <div class="container">
-            <a class="navbar-brand" href="{% url 'index' %}">New Zealand Pure Dairy Visitor Sign In</a>  <!--"a" element create a link -->
-              <!--"{% url 'index' %}" this is dynamic link for Jinja2, use "url" keyword follow by the name of url 'index'
-              this name is in urls.py, the name of path, when click on navigation pythonhow, will take you to the link in urls.py-->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-              <!-- The button is 3-line button can collapse and show up -->
-            <div class="collapse navbar-collapse" id="navbarNav">
-            </div>
+          <div class="container-fluid d-flex justify-content-center">
+            <a class="navbar-brand" href="{% url 'choose_visitor' %}">Return To Main Page</a>
           </div>
         </nav>
         <div class="container">
@@ -95,6 +87,32 @@
             }
           });
       </script>
+
+        {% block idle_redirect %}
+        <script>
+        (function() {
+            // Set your idle time (in seconds)
+            const idleDurationSecs = 30;
+            // Django template tag for your redirect URL
+            const redirectUrl = "{% url 'choose_visitor' %}";
+            let idleTimeout;
+
+            // Function to reset the idle timer
+            const resetIdleTimeout = function() {
+                if (idleTimeout) clearTimeout(idleTimeout);
+                idleTimeout = setTimeout(() => window.location.href = redirectUrl, idleDurationSecs * 1000);
+            };
+
+            // Start the timer on page load
+            resetIdleTimeout();
+
+            // Reset the timer on any user activity
+            ['keydown', 'mousedown', 'mousemove', 'touchstart', 'scroll'].forEach(function(evt) {
+                document.addEventListener(evt, resetIdleTimeout, false);
+            });
+        })();
+        </script>
+        {% endblock %}
 
     </body>
 

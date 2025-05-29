@@ -9,6 +9,11 @@
             <div id="flash-message" class="alert alert-success text-center">
                 Sign out success, see you next time {{ visitor_name }}!
             </div>
+            <div class="d-flex justify-content-center mt-3">
+                <a href="{% url 'choose_visitor' %}" class="btn btn-primary btn-lg px-5">
+                    Return to Main Page
+                </a>
+            </div>
             <script>
                 setTimeout(function() {
                     window.location.href = "{% url 'choose_visitor' %}";
@@ -39,27 +44,6 @@
         {% endif %}
     </div>
 </div>
-
-<script>
-let inactivityTimeout;
-
-function resetInactivityTimer() {
-    clearTimeout(inactivityTimeout);
-    inactivityTimeout = setTimeout(function() {
-        window.location.href = "{% url 'choose_visitor' %}";
-    }, 10000); // 1 minute = 60000 ms
-}
-
-// Reset timer on any interaction
-['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(function(event) {
-    document.addEventListener(event, resetInactivityTimer, false);
-});
-
-// Start the timer when the page loads
-resetInactivityTimer();
-</script>
-
-
 
 
 {% endblock %}
