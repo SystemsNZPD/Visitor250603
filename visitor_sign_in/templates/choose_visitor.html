@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center" style="height: 60vh;">
+    <div>
+        <h2 class="mb-4 text-center">Welcome to New Zealand Pure Dairy!</h2>
+        <h2 class="mb-4 text-center">Please select an option:</h2>
+        <div class="d-flex gap-4 justify-content-center mb-4">
+            <a href="{% url 'index' %}" class="btn btn-primary btn-lg px-5">New Visitor</a>
+            <a href="{% url 'return_visitor' %}" class="btn btn-success btn-lg px-5">Return Visitor</a>
+
+        </div>
+        <div class="d-flex gap-4 justify-content-center">
+            <a href="{% url 'sign_out' %}" class="btn btn-danger btn-lg px-5">Sign Out</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

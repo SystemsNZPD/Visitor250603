@@ -24,6 +24,7 @@ class Form(models.Model):
         help_text="Who are you visiting"
     )
     created_at = models.DateTimeField(auto_now_add=True)
+    sign_out = models.DateTimeField(null=True)
 
     has_no_fever = models.BooleanField(default=False)
     has_no_vomiting = models.BooleanField(default=False)

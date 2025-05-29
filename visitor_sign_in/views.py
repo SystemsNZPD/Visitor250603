@@ -3,6 +3,7 @@ from .forms import VisitorForm
 from .models import Form
 from django.contrib import messages
 from django.core.mail import EmailMessage
+from django.utils import timezone
 
 def index(request):
     if request.method == 'POST':
@@ -92,3 +93,29 @@ def return_visitor(request):
         'form': form,  # Pass the form for error display if needed
     }
     return render(request, 'return_visitor.html', context)
+
+def choose_visitor(request):
+    return render(request, 'choose_visitor.html')
+
+def sign_out_view(request):
+    if request.method == 'POST':
+        visitor_id = request.POST.get('visitor_id')
+        try:
+            visitor = Form.objects.get(id=visitor_id, sign_out__isnull=True)
+            visitor.sign_out = timezone.now()
+            visitor.save()
+            # Show success message and redirect after 5 seconds
+            return render(request, 'sign_out.html', {
+                'success': True,
+                'visitor_name': visitor.visitor_name,
+            })
+        except Form.DoesNotExist:
+            # Handle not found or already signed out
+            return render(request, 'sign_out.html', {
+                'error': "Visitor not found or already signed out.",
+                'visitors': Form.objects.filter(sign_out__isnull=True)
+            })
+    else:
+        # GET: show dropdown
+        visitors = Form.objects.filter(sign_out__isnull=True).order_by('-created_at')
+        return render(request, 'sign_out.html', {'visitors': visitors})
