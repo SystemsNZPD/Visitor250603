@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.core.mail import EmailMessage
 from django.utils import timezone
 
+
 def index(request):
     if request.method == 'POST':
         form = VisitorForm(request.POST)
@@ -23,12 +24,14 @@ def index(request):
                                 has_no_fever=has_no_fever, has_no_vomiting=has_no_vomiting,
                                 has_no_skin_lesions=has_no_skin_lesions, has_no_running_nose=has_no_running_nose)
 
-            message_body = f"{visitor_name} From {company_name} is here!"
-            email_message = EmailMessage(subject="You have Visitor!!", body=message_body, to=["raylee598@gmail.com"])
-            email_message.send()  #specifiy the sender in setting .py
+
 
             messages.success(request, "Form Submitted successfully!!!")
             form = VisitorForm()  # Clear the form after successful submission
+            message_body = f"{visitor_name} From {company_name} is here!"
+            email_message = EmailMessage(subject="You have Visitor!!", body=message_body, to=["ray.lee@nzpuredairy.co.nz"])
+            email_message.send()  #specifiy the sender in setting .py
+
         else:
             messages.warning(request,"Form submission failed. Please correct the errors.")
     else:
@@ -74,12 +77,13 @@ def return_visitor(request):
                 has_no_running_nose=has_no_running_nose
             )
 
-            message_body = f"{visitor_name} From {company_name} is here!"
-            email_message = EmailMessage(subject="You have Visitor!!", body=message_body, to=["raylee598@gmail.com"])
-            email_message.send()  # specifiy the sender in setting .py
 
 
             messages.success(request, "Return visitor sign-in submitted successfully!")
+            message_body = f"{visitor_name} From {company_name} is here!"
+            email_message = EmailMessage(subject="You have Visitor!!", body=message_body, to=["ray.lee@nzpuredairy.co.nz"])
+            email_message.send()  # specifiy the sender in setting .py
+
             form = VisitorForm()  # Clear the form after successful submission
         else:
             messages.warning(request, "Form submission failed. Please correct the errors.")
