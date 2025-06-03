@@ -135,3 +135,7 @@ EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 
 # app password for visitor_NZPD@outlook.com is tpfnxwgamoftctsb
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://web-production-7f13.up.railway.app',
+]
