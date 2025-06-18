@@ -5,6 +5,19 @@ from django.contrib import messages
 from django.core.mail import EmailMessage
 from django.utils import timezone
 
+VISIT_TO_EMAILS = {
+    'tony': 'tony.cox-smith@nzpuredairy.co.nz',
+    'ann': 'ann.mansoor@nzpuredairy.co.nz',
+    'joanna': 'joanna.wu@nzpuredairy.co.nz',
+    'mele': 'mele.tatafu@nzpuredairy.co.nz',
+    'vicky': 'weidi.qu@nzpuredairy.co.nz',
+    'emily': 'emily.donovan@nzpuredairy.co.nz',
+    'ray': 'ray.lee@nzpuredairy.co.nz',
+    'ricky': 'richard.light@nzpuredairy.co.nz',
+    'cy': 'chimyun.cheng@nzpuredairy.co.nz',  # Exceptional case
+    'julie': 'julie.ullness@nzpuredairy.co.nz',
+}
+
 
 def index(request):
     if request.method == 'POST':
@@ -19,21 +32,31 @@ def index(request):
             has_no_skin_lesions = form.cleaned_data["has_no_skin_lesions"]
             has_no_running_nose = form.cleaned_data["has_no_running_nose"]
 
-            Form.objects.create(visitor_name=visitor_name, company_name=company_name,
-                                    phone_number=phone_number, visit_to=visit_to,
-                                has_no_fever=has_no_fever, has_no_vomiting=has_no_vomiting,
-                                has_no_skin_lesions=has_no_skin_lesions, has_no_running_nose=has_no_running_nose)
-
-
+            Form.objects.create(visitor_name=visitor_name,
+                                company_name=company_name,
+                                phone_number=phone_number,
+                                visit_to=visit_to,
+                                has_no_fever=has_no_fever,
+                                has_no_vomiting=has_no_vomiting,
+                                has_no_skin_lesions=has_no_skin_lesions,
+                                has_no_running_nose=has_no_running_nose)
 
             messages.success(request, "Form Submitted successfully!!!")
             form = VisitorForm()  # Clear the form after successful submission
             message_body = f"{visitor_name} From {company_name} is here!"
-            email_message = EmailMessage(subject="You have Visitor!!", body=message_body, to=["ray.lee@nzpuredairy.co.nz"])
-            email_message.send()  #specifiy the sender in setting .py
+
+            #Get the recipient's email based on visit_to
+            recipient_email = VISIT_TO_EMAILS[visit_to]
+            if recipient_email:
+                email_message = EmailMessage(subject="You have Visitor!!",
+                                             body=message_body,
+                                             to=[recipient_email])
+                email_message.send()  #specifiy the sender in setting .py
+            else:
+                messages.warning(request,"No eamil recipient found for this selection")
 
         else:
-            messages.warning(request,"Form submission failed. Please correct the errors.")
+            messages.warning(request, "Form submission failed. Please correct the errors.")
     else:
         form = VisitorForm()
     return render(request, "index.html", {"form": form})
