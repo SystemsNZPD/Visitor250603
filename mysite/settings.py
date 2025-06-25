@@ -139,3 +139,6 @@ EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 CSRF_TRUSTED_ORIGINS = [
     'https://visitor.nzpuredairy.co.nz',
 ]
+
+CELERY_BROKER_URL = os.environ.get('REDIS_URL')
+CELERY_RESULT_BACKEND = os.environ.get('REDIS_URL')
