@@ -104,7 +104,11 @@ def return_visitor(request):
 
             messages.success(request, "Return visitor sign-in submitted successfully!")
             message_body = f"{visitor_name} From {company_name} is here!"
-            email_message = EmailMessage(subject="You have Visitor!!", body=message_body, to=["ray.lee@nzpuredairy.co.nz"])
+
+            recipient_email = VISIT_TO_EMAILS[visit_to]
+            email_message = EmailMessage(subject="You have Visitor!!",
+                                         body=message_body,
+                                         to=[recipient_email])
             email_message.send()  # specifiy the sender in setting .py
 
             form = VisitorForm()  # Clear the form after successful submission
