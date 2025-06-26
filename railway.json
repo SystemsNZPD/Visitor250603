@@ -31,6 +31,7 @@
       "startCommand": "celery -A mysite beat -l info",
       "build": {
         "builder": "NIXPACKS"
+      }
     }
   ]
 }
