@@ -4,8 +4,33 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn mysite.wsgi",
+    "numReplicas": 1,
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10
-  }
+  },
+  "services": [
+    {
+      "name": "web",
+      "startCommand": "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn mysite.wsgi:application --bind 0.0.0.0:$PORT",
+      "build": {
+        "builder": "NIXPACKS"
+      },
+      "deploy": {
+        "healthcheckPath": "/"
+      }
+    },
+    {
+      "name": "celery-worker",
+      "startCommand": "celery -A mysite worker -l info",
+      "build": {
+        "builder": "NIXPACKS"
+      }
+    },
+    {
+      "name": "celery-beat",
+      "startCommand": "celery -A mysite beat -l info",
+      "build": {
+        "builder": "NIXPACKS"
+    }
+  ]
 }
