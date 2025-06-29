@@ -8,7 +8,7 @@ class FormAdmin(admin.ModelAdmin): #this modeladmin design to create/modify admi
     #when django see list_display, it will try to display the column in the (), and the name inside need to corrosped class Form in the models
     search_fields = ("visitor_name", "company_name", "visit_to")
     list_filter = ("visitor_name", "company_name")
-    ordering = ("-company_name",)   #- infront of ordering means reverse order
+    ordering = ("-created_at",)   #- infront of ordering means reverse order
     # readonly_fields = ("occupation",)
 
 admin.site.register(Form, FormAdmin)
