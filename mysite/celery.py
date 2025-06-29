@@ -15,6 +15,6 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     'signout-all-visitors-7pm': {
         'task': 'visitor_sign_in.tasks.signout_all_visitors',  # Adjust path to match your app name
-        'schedule': crontab(hour=11, minute=30),  # 7:00 PM every day
+        'schedule': crontab(hour=20, minute=00),  # 8:00 PM every day
     },
 }
