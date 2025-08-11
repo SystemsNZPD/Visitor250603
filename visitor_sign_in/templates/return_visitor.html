@@ -1,6 +1,41 @@
 {% extends 'base.html' %}
 {% block content %}
 <h1>Return Visitor</h1>
+
+<style>
+/* Loading overlay style */
+#loading-overlay {
+    display: none; /* Hidden until submit */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.7);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 6px solid #ccc;
+    border-top-color: #007bff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+</style>
+
+<!-- Spinner overlay -->
+<div id="loading-overlay">
+    <div class="spinner"></div>
+</div>
+
 <form method="post">
     {% csrf_token %}
     <div class="form-group mb-4">
@@ -37,7 +72,7 @@
         <legend><b>Health Declaration</b></legend>
         <div class="form-group mb-3">
             <label class="switch-label" for="id_has_no_fever">
-              <input type="checkbox" name="has_no_fever" id="id_has_no_fever" >
+              <input type="checkbox" name="has_no_fever" id="id_has_no_fever">
               <span class="switch-custom"></span>
               <span class="switch-text">I Have No Fever</span>
               <div class="switch-confirm">Touch to Confirm</div>
@@ -53,7 +88,7 @@
         </div>
         <div class="form-group mb-3">
             <label class="switch-label" for="id_has_no_skin_lesions">
-                <input type="checkbox" name="has_no_skin_lesions" id="id_has_no_skin_lesions" >
+                <input type="checkbox" name="has_no_skin_lesions" id="id_has_no_skin_lesions">
                 <span class="switch-custom"></span>
                 <span class="switch-text">I Have No Skin Lesions</span>
                 <div class="switch-confirm">Touch to Confirm</div>
@@ -61,12 +96,11 @@
         </div>
         <div class="form-group mb-3">
             <label class="switch-label" for="id_has_no_running_nose">
-                <input type="checkbox" name="has_no_running_nose" id="id_has_no_running_nose" >
+                <input type="checkbox" name="has_no_running_nose" id="id_has_no_running_nose">
                 <span class="switch-custom"></span>
                 <span class="switch-text">I Have No Running Nose or Ear Discharge</span>
                 <div class="switch-confirm">Touch to Confirm</div>
             </label>
-
         </div>
     </fieldset>
 
@@ -77,42 +111,37 @@
         {% endfor %}
     {% endif %}
 </form>
-<script>
-    visitorsByCompany[company].forEach(function(visitor) {
-        const option = document.createElement('option');
-        option.value = visitor[0];      // Should be name
-        option.textContent = visitor[0]; // Should be name
-        visitorSelect.appendChild(option);
-    });
-
-</script>
 
 {{ visitors_by_company|json_script:"visitors-data" }}
+
 <script>
-    const visitorsByCompany = JSON.parse(document.getElementById('visitors-data').textContent);
-    document.getElementById('company_name').addEventListener('change', function() {
-        const company = this.value;
-        const visitorSelect = document.getElementById('visitor_name');
-        const phoneInput = document.getElementById('phone_number');
-        visitorSelect.innerHTML = '<option value="" disabled selected>Select Visitor</option>';
-        phoneInput.value = '';
-        if (visitorsByCompany[company]) {
-            visitorsByCompany[company].forEach(function(visitor) {
-                const option = document.createElement('option');
-                option.value = visitor[0];
-                option.textContent = visitor[0];
-                visitorSelect.appendChild(option);
-            });
-        }
-    });
-    document.getElementById('visitor_name').addEventListener('change', function() {
-        const company = document.getElementById('company_name').value;
-        const visitorName = this.value;
-        const visitorData = visitorsByCompany[company].find(v => v[0] === visitorName);
-        document.getElementById('phone_number').value = visitorData ? visitorData[1] : '';
-    });
-</script>
-<script>
+/* Populate visitors when company changes */
+const visitorsByCompany = JSON.parse(document.getElementById('visitors-data').textContent);
+document.getElementById('company_name').addEventListener('change', function() {
+    const company = this.value;
+    const visitorSelect = document.getElementById('visitor_name');
+    const phoneInput = document.getElementById('phone_number');
+    visitorSelect.innerHTML = '<option value="" disabled selected>Select Visitor</option>';
+    phoneInput.value = '';
+    if (visitorsByCompany[company]) {
+        visitorsByCompany[company].forEach(function(visitor) {
+            const option = document.createElement('option');
+            option.value = visitor[0];
+            option.textContent = visitor[0];
+            visitorSelect.appendChild(option);
+        });
+    }
+});
+
+/* Populate phone when visitor changes */
+document.getElementById('visitor_name').addEventListener('change', function() {
+    const company = document.getElementById('company_name').value;
+    const visitorName = this.value;
+    const visitorData = visitorsByCompany[company].find(v => v[0] === visitorName);
+    document.getElementById('phone_number').value = visitorData ? visitorData[1] : '';
+});
+
+/* Validation + Spinner on submit */
 document.querySelector('form').addEventListener('submit', function(e) {
     var ids = [
         'id_has_no_fever',
@@ -127,16 +156,21 @@ document.querySelector('form').addEventListener('submit', function(e) {
         if (!checkbox.checked) {
             confirmDiv.textContent = 'Please confirm';
             confirmDiv.style.color = 'red';
-            confirmDiv.style.display = 'inline'; // Show message if not checked
+            confirmDiv.style.display = 'inline';
             valid = false;
         } else {
-            confirmDiv.style.display = 'none'; // Hide message when checked
+            confirmDiv.style.display = 'none';
         }
     });
-    if (!valid) e.preventDefault();
+
+    if (!valid) {
+        e.preventDefault();
+    } else {
+        document.getElementById('loading-overlay').style.display = 'flex';
+    }
 });
 
-// Also update the message live when the user clicks the checkbox:
+/* Live update confirm text */
 ['id_has_no_fever','id_has_no_vomiting','id_has_no_skin_lesions','id_has_no_running_nose'].forEach(function(id) {
     var checkbox = document.getElementById(id);
     var confirmDiv = checkbox.closest('.form-group').querySelector('.switch-confirm');
